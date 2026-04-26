@@ -1,0 +1,22 @@
+FROM dorowu/ubuntu-desktop-lxde-vnc:latest
+
+# Install Firefox
+RUN apt-get update && apt-get install -y firefox && rm -rf /var/lib/apt/lists/*
+
+# Create kiosk startup script
+RUN echo '#!/bin/bash\n\
+# Start VNC and desktop\n\
+/startup.sh &\n\
+sleep 3\n\
+\n\
+# Wait for X server\n\
+timeout 20 bash -c "while ! pgrep Xvfb > /dev/null; do sleep 1; done"\n\
+\n\
+# Launch Firefox in kiosk mode (full screen, no UI)\n\
+export DISPLAY=:1\n\
+firefox --kiosk "$TARGET_URL" &\n\
+\n\
+# Keep container alive\n\
+tail -f /dev/null' > /kiosk-start.sh && chmod +x /kiosk-start.sh
+
+CMD ["/kiosk-start.sh"]

@@ -1,0 +1,14 @@
+{
+  "name": "browser-sandbox",
+  "version": "1.0.0",
+  "description": "Secure Browser Sandbox - Cybersecurity Capstone Project",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "install-deps": "npm install express http-proxy"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "http-proxy": "^1.18.1"
+  }
+}
