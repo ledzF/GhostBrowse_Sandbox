@@ -1,3 +1,8 @@
+Here you go — clean, ready-to-copy **GitHub README.md** (no extra instructions, just paste):
+
+---
+
+```markdown
 # 👻 GhostBrowse - Secure Browser Sandbox
 
 [![Security](https://img.shields.io/badge/Security-CEH%20%7C%20Security%2B-blue)]()
@@ -5,177 +10,169 @@
 [![Node.js](https://img.shields.io/badge/Node.js-Backend-green)]()
 [![License](https://img.shields.io/badge/License-MIT-yellow)]()
 
-> **GhostBrowse** is a cybersecurity sandbox that runs isolated browser sessions in Docker containers. Each URL opens in a fresh Ubuntu desktop with Firefox, streamed directly to your browser via noVNC. Perfect for safely analyzing suspicious links, phishing URLs, and malware domains.
+> **GhostBrowse** is a cybersecurity sandbox that runs isolated browser sessions in Docker containers. Each URL opens in a fresh Ubuntu desktop with Firefox, streamed directly to your browser via noVNC.
 
 ---
 
 ## 🎯 Features
 
-- 🔒 **Isolated Environments** - Each session runs in a separate Docker container with no cross-contamination
-- 🦊 **Full Desktop Experience** - Complete Ubuntu desktop with Firefox, not just a headless browser
-- 📺 **Real-time VNC Streaming** - Interact with the remote browser via noVNC in your web browser
-- ⏱️ **Auto-Destruction** - Sessions automatically terminate after 30 minutes
-- 🛡️ **Security Hardened** - Containers run with restricted capabilities, no data persistence
-- 🚫 **Internal Network Blocked** - Prevents access to localhost, private IPs, and cloud metadata
-- 📊 **Session Management** - Monitor all active sessions with live countdown timers
-- 🎨 **Responsive UI** - Works on desktop and mobile devices
+- 🔒 Isolated Docker-based browser sessions  
+- 🦊 Full Ubuntu Desktop with Firefox  
+- 📺 Live noVNC browser streaming  
+- ⏱️ Auto-destroy sessions (30 min)  
+- 🛡️ Hardened containers (no privileges, read-only)  
+- 🚫 Blocks internal/private network access  
+- 📊 Session monitoring with timers  
+- 🎨 Responsive UI  
 
 ---
 
 ## 🏗️ Architecture
-┌─────────────────────────────────────────────────────────────┐
-│ User's Browser │
-│ ┌───────────────────────────────────────────────────────┐ │
-│ │ GhostBrowse Web Interface (HTML/JS) │ │
-│ └───────────────────┬───────────────────────────────────┘ │
-└──────────────────────┼──────────────────────────────────────┘
-│
-│ HTTP/WebSocket
-▼
-┌─────────────────────────────────────────────────────────────┐
-│ Node.js API Server │
-│ ┌───────────────────────────────────────────────────────┐ │
-│ │ • Session Management │ │
-│ │ • Proxy Routing │ │
-│ │ • URL Validation & Security │ │
-│ │ • Container Lifecycle Mgmt │ │
-│ └───────────────────┬───────────────────────────────────┘ │
-└──────────────────────┼──────────────────────────────────────┘
-│
-│ Docker API
-▼
-┌─────────────────────────────────────────────────────────────┐
-│ Docker Engine │
-│ ┌──────────┐ ┌──────────┐ ┌──────────┐ │
-│ │Container 1│ │Container 2│ │Container N│ │
-│ │ :10000 │ │ :10001 │ │ :1000N │ │
-│ │ │ │ │ │ │ │
-│ │ Ubuntu │ │ Ubuntu │ │ Ubuntu │ │
-│ │ +Firefox │ │ +Firefox │ │ +Firefox │ │
-│ │ +noVNC │ │ +noVNC │ │ +noVNC │ │
-│ └──────────┘ └──────────┘ └──────────┘ │
-└─────────────────────────────────────────────────────────────┘
 
-text
+```
+
+User Browser → Node.js Server → Docker Engine → Isolated Containers
+↓
+Ubuntu + Firefox + noVNC
+
+````
 
 ---
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-
-- **Docker** installed and running
-- **Node.js** v16 or higher
-- **npm** (comes with Node.js)
+- Docker
+- Node.js (v16+)
+- npm
 
 ### Installation
 
 ```bash
-# Clone the repository
 git clone https://github.com/yourusername/ghostbrowse.git
 cd ghostbrowse
-
-# Install dependencies
-npm install express http-proxy
-
-# Pull the base image
+npm install
 docker pull dorowu/ubuntu-desktop-lxde-vnc
-
-# Start the server
 node server.js
-Access
-Open your browser and navigate to:
+````
 
-text
+### Access
+
+```
 http://localhost:3000
-For Cloud Shell users:
+```
 
-text
-Click "Web Preview" → Change port to 3000
-📦 Project Structure
-text
+---
+
+## 📦 Project Structure
+
+```
 ghostbrowse/
-├── server.js                    # Main Node.js API server
-├── index.html                   # Web interface
-├── package.json                 # Dependencies
-├── start-browser-sandbox.sh     # Startup script
-├── README.md                    # This file
-└── node_modules/                # npm dependencies
-🔧 API Endpoints
-Method	Endpoint	Description
-GET	/	Web interface
-POST	/api/sessions	Create new browser session
-GET	/api/sessions	List all active sessions
-GET	/api/sessions/:id	Get session details
-DELETE	/api/sessions/:id	Destroy a session
-GET	/api/health	Health check
-GET	/view/:sessionId/	Proxy to container's noVNC
-Example: Create Session
-bash
-curl -X POST http://localhost:3000/api/sessions \
-  -H "Content-Type: application/json" \
-  -d '{"url": "https://example.com"}'
-Response:
+├── server.js
+├── index.html
+├── package.json
+├── start-browser-sandbox.sh
+└── README.md
+```
 
-json
-{
-  "sessionId": "a1b2c3d4e5f6",
-  "streamUrl": "/view/a1b2c3d4e5f6/",
-  "url": "https://example.com",
-  "expiresIn": 1800,
-  "created": 1719000000000
-}
-🛡️ Security Features
-URL Validation
-Blocks internal IPs (127.0.0.1, 192.168.x.x, 10.x.x.x, 172.16.x.x)
+---
 
-Blocks metadata endpoints (169.254.169.254)
+## 🔧 API Endpoints
 
-Enforces HTTPS when protocol not specified
+| Method | Endpoint            | Description    |
+| ------ | ------------------- | -------------- |
+| GET    | `/`                 | UI             |
+| POST   | `/api/sessions`     | Create session |
+| GET    | `/api/sessions`     | List sessions  |
+| DELETE | `/api/sessions/:id` | Stop session   |
+| GET    | `/view/:id/`        | Access sandbox |
 
-Container Hardening
-bash
---cap-drop=ALL           # Drop all capabilities
---security-opt=no-new-privileges  # Prevent privilege escalation
---read-only              # Read-only root filesystem
---memory=512m            # Memory limit
---cpus=0.5               # CPU limit
-Session Isolation
-Each session gets a unique container
+---
 
-No shared volumes between sessions
+## 🛡️ Security Features
 
-Random port assignment per container
+* Blocks internal IPs (127.0.0.1, 192.168.x.x, etc.)
+* Blocks cloud metadata endpoints
+* HTTPS enforcement
+* Container restrictions:
 
-No data persistence between sessions
+  ```bash
+  --cap-drop=ALL
+  --read-only
+  --memory=512m
+  --cpus=0.5
+  ```
 
-🎓 Use Cases
-Phishing Analysis - Safely open suspected phishing URLs
+---
 
-Malware Research - Visit potentially malicious websites
+## 🎓 Use Cases
 
-Privacy Browsing - Browse without leaving local traces
+* Phishing analysis
+* Malware link testing
+* Secure browsing
+* Security training
+* URL previewing
 
-Cross-Browser Testing - Test websites in isolated environments
+---
 
-Security Training - Demonstrate browser-based attacks safely
+## ⚙️ Configuration
 
-URL Scanning - Preview links before sharing
+```javascript
+// Session timeout
+30 * 60 * 1000
 
-🔄 How It Works
-User enters URL in the web interface
+// Starting port
+10000
+```
 
-Server spawns a new Docker container with Ubuntu desktop
+---
 
-Firefox installs automatically inside the container
+## 🚀 Deployment
 
-noVNC streams the desktop to your browser via WebSocket
+### PM2
 
-User interacts with the remote browser in real-time
+```bash
+pm2 start server.js --name ghostbrowse
+```
 
-Session auto-destroys after 30 minutes (configurable)
+---
 
-text
-User Input → URL Validation → Docker Container Spawn → 
-Desktop Ready → Firefox Launch → VNC Stream → 
-Browser Interaction → Auto-Destroy after 30min
+## 📈 Performance
+
+* Startup: ~5–8 sec
+* Memory: ~500MB/session
+* CPU: 0.5 core/session
+
+---
+
+## 🔍 Troubleshooting
+
+**Black screen?** → Wait 10 sec & refresh
+**Port issue?**
+
+```bash
+fuser -k 3000/tcp
+```
+
+---
+
+## 🏆 Capstone Project
+
+**Title:** GhostBrowse: Secure Remote Browser Isolation using Docker
+**Domain:** Cybersecurity
+**Tech:** Docker, Node.js, noVNC, Ubuntu
+
+---
+
+## 📝 License
+
+MIT License
+
+---
+
+## ⚠️ Disclaimer
+
+For educational & security research use only.
+
+```
+
