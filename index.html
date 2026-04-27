@@ -3,54 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔒 Secure Browser Sandbox</title>
+    <title>👻 GhostBrowse - Secure Browser Sandbox</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-primary: #131724;
+            --bg-secondary: #1a1f2e;
+            --bg-card: #1e2436;
+            --border-subtle: #2a3146;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a8c3;
+            --text-muted: #6e768f;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --info: #3498db;
+            --accent: #5b6e9c;
+            --ghostbrowse-green: #00d4aa;
+        }
+        
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0a0e27;
-            color: #e0e0e0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
             min-height: 100vh;
         }
         
         .header {
-            background: #131842;
+            background: var(--bg-secondary);
             padding: 1.2rem 2rem;
-            border-bottom: 2px solid #00d4aa;
+            border-bottom: 1px solid var(--border-subtle);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         
-        .header h1 { color: #00d4aa; font-size: 1.4rem; }
+        .header h1 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: -0.3px;
+        }
+        
+        .header h1 span {
+            color: var(--ghostbrowse-green);
+        }
         
         .badge {
-            background: #0f3460;
+            background: var(--bg-card);
             padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 0.75rem;
-            border: 1px solid #00d4aa;
-            color: #00d4aa;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            font-weight: 500;
         }
         
-        .container { max-width: 1400px; margin: 0 auto; padding: 1.5rem; }
-        
-        .info-box {
-            background: #0f3460;
-            border-left: 4px solid #00d4aa;
-            padding: 12px 18px;
-            border-radius: 0 8px 8px 0;
-            margin-bottom: 1rem;
-            font-size: 0.85rem;
-        }
+        .container { max-width: 100%; margin: 0 auto; padding: 1.5rem; }
         
         .url-section {
-            background: #131842;
+            background: var(--bg-secondary);
             padding: 1.5rem;
-            border-radius: 12px;
+            border-radius: 16px;
             margin-bottom: 1.5rem;
-            border: 1px solid #2a2f5a;
+            border: 1px solid var(--border-subtle);
+        }
+        
+        .url-section h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
         }
         
         .input-group { display: flex; gap: 0.8rem; margin-top: 0.8rem; }
@@ -58,163 +83,312 @@
         #urlInput {
             flex: 1;
             padding: 10px 16px;
-            background: #0a0e27;
-            border: 2px solid #2a2f5a;
-            color: #e0e0e0;
-            border-radius: 8px;
-            font-size: 15px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+            border-radius: 12px;
+            font-size: 14px;
             outline: none;
+            transition: border-color 0.2s ease;
+            font-family: monospace;
         }
         
-        #urlInput:focus { border-color: #00d4aa; }
+        #urlInput:focus { border-color: var(--accent); }
+        #urlInput::placeholder { color: var(--text-muted); }
         
         .btn {
             padding: 10px 24px;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             font-weight: 600;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 12px;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
         }
         
         .btn-launch {
-            background: #00d4aa;
-            color: #0a0e27;
+            background: var(--ghostbrowse-green);
+            color: var(--bg-primary);
             white-space: nowrap;
         }
         
-        .btn-launch:hover:not(:disabled) { background: #00ffcc; }
-        .btn-launch:disabled { background: #555; cursor: not-allowed; }
-        
-        .sessions-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
-            gap: 1.2rem;
-            margin-top: 0.8rem;
+        .btn-launch:hover:not(:disabled) { 
+            background: #00ffcc;
+            transform: translateY(-1px);
         }
         
-        .session-card {
-            background: #131842;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid #2a2f5a;
+        .btn-launch:disabled { 
+            background: var(--border-subtle);
+            color: var(--text-muted);
+            cursor: not-allowed;
         }
         
-        .session-header {
-            background: #1a1f4a;
-            padding: 8px 14px;
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--bg-card);
+            border-color: var(--accent);
+            color: var(--text-primary);
+        }
+        
+        .sessions-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+        
+        .sessions-header h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .session-count {
+            font-size: 12px;
+            color: var(--ghostbrowse-green);
+            font-weight: 600;
+        }
+        
+        .sessions-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        
+        .session-card {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border-subtle);
+            transition: border-color 0.2s ease;
+        }
+        
+        .session-card:hover { border-color: var(--accent); }
+        
+        .session-header {
+            background: var(--bg-card);
+            padding: 10px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            border-bottom: 1px solid var(--border-subtle);
         }
         
         .session-id {
-            font-family: monospace;
-            color: #00d4aa;
+            font-family: 'Courier New', monospace;
+            color: var(--ghostbrowse-green);
+            font-size: 12px;
+            font-weight: 600;
         }
         
         .status-badge {
-            font-size: 0.7rem;
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-weight: bold;
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
-        .status-starting { background: #ffd700; color: #000; }
-        .status-active { background: #00d4aa; color: #000; }
+        .status-starting { 
+            background: var(--bg-card);
+            border: 1px solid var(--warning);
+            color: var(--warning);
+        }
+        
+        .status-active { 
+            background: var(--bg-card);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
         
         .session-url {
-            padding: 8px 14px;
-            font-size: 0.8rem;
-            color: #8892b0;
+            padding: 8px 16px;
+            font-size: 11px;
+            color: var(--text-secondary);
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            background: var(--bg-primary);
+            font-family: monospace;
         }
         
         .session-preview {
             width: 100%;
-            height: 400px;
+            height: 85vh;
+            min-height: 600px;
             border: none;
             background: #000;
         }
         
         .session-footer {
-            padding: 8px 14px;
+            padding: 10px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #1a1f4a;
-            font-size: 0.8rem;
+            background: var(--bg-card);
+            font-size: 12px;
+            border-top: 1px solid var(--border-subtle);
         }
+        
+        .timer {
+            color: var(--text-muted);
+            font-family: monospace;
+            font-size: 11px;
+        }
+        
+        .timer-warning { color: var(--danger) !important; }
         
         .btn-stop {
-            background: #ff4757;
-            color: white;
-            border: none;
+            background: transparent;
+            border: 1px solid var(--danger);
+            color: var(--danger);
             padding: 5px 14px;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 0.75rem;
+            font-size: 11px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
         }
         
-        .btn-stop:hover { background: #ff6b6b; }
+        .btn-stop:hover { 
+            background: var(--danger);
+            color: white;
+        }
+        
+        .btn-open-tab {
+            background: transparent;
+            border: 1px solid var(--info);
+            color: var(--info);
+            padding: 5px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            margin-right: 8px;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .btn-open-tab:hover {
+            background: var(--info);
+            color: white;
+        }
         
         .empty-state {
             text-align: center;
-            padding: 3rem;
-            color: #666;
-            grid-column: 1 / -1;
+            padding: 4rem 2rem;
+            color: var(--text-muted);
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            border: 1px solid var(--border-subtle);
+        }
+        
+        .empty-icon { font-size: 3rem; margin-bottom: 0.5rem; opacity: 0.5; }
+        
+        .footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-muted);
+            font-size: 11px;
+            border-top: 1px solid var(--border-subtle);
+            margin-top: 2rem;
         }
         
         @media (max-width: 768px) {
             .input-group { flex-direction: column; }
-            .sessions-grid { grid-template-columns: 1fr; }
+            .session-preview { height: 60vh; min-height: 400px; }
+            .header { padding: 1rem; }
+            .header h1 { font-size: 16px; }
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>🔒 Secure Browser Sandbox</h1>
+        <h1>👻 <span>GhostBrowse</span> - Secure Browser Sandbox</h1>
         <div style="display: flex; gap: 0.8rem; align-items: center;">
-            <span class="badge">CEH</span>
-            <span class="badge">Security+</span>
-            <span style="font-size: 0.8rem; color: #00d4aa;" id="countBadge">Active: 0</span>
+            <span class="session-count" id="countBadge">Active: 0</span>
         </div>
     </div>
     
     <div class="container">
         <div class="url-section">
-            <h3>🚀 Launch Isolated Browser</h3>
-            <div class="info-box">
-                🛡️ Isolated Docker container • Ubuntu + Firefox • Auto-destroys in 30 min • No data persistence
-            </div>
+            <h3>🚀 Launch Isolated Browser Session</h3>
             <div class="input-group">
-                <input type="text" id="urlInput" placeholder="Enter URL (e.g., https://example.com)" onkeypress="if(event.key==='Enter')launch()">
-                <button class="btn btn-launch" id="launchBtn" onclick="launch()">🚀 Launch</button>
+                <input type="text" id="urlInput" placeholder="Enter URL to analyze safely..." onkeypress="if(event.key==='Enter')launchSession()">
+                <button class="btn btn-launch" id="launchBtn" onclick="launchSession()">Launch</button>
             </div>
         </div>
         
-        <h3>Active Sessions: <span id="countDisplay" style="color: #00d4aa;">0</span></h3>
+        <div class="sessions-header">
+            <h3>Active Sessions</h3>
+            <span class="session-count" id="countDisplay">0</span>
+        </div>
+        
         <div class="sessions-grid" id="grid">
             <div class="empty-state" id="emptyState">
-                <div style="font-size: 3rem;">🔍</div>
+                <div class="empty-icon">🔍</div>
                 <p>No active sessions</p>
+                <p style="font-size: 11px; margin-top: 0.5rem;">Enter a URL above to start an isolated browser</p>
             </div>
         </div>
     </div>
     
+    <div class="footer">
+        <span>Powered by Docker & noVNC | Isolated Ubuntu Environments</span>
+    </div>
+    
     <script>
-        const sessions = new Map();
+        const activeSessions = new Map();
         
-        async function launch() {
+        // Generate user ID
+        function getUserId() {
+            let userId = localStorage.getItem('ghostbrowse_uid');
+            if (!userId) {
+                userId = 'u_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('ghostbrowse_uid', userId);
+            }
+            return userId;
+        }
+        
+        const USER_ID = getUserId();
+        
+        // Restore sessions on page load
+        async function restoreSessions() {
+            try {
+                const res = await fetch('/api/sessions', {
+                    headers: { 'x-user-id': USER_ID }
+                });
+                if (!res.ok) return;
+                
+                const sessions = await res.json();
+                if (sessions.length > 0) {
+                    document.getElementById('emptyState').style.display = 'none';
+                    for (const s of sessions) {
+                        addSessionCard(s);
+                    }
+                }
+            } catch (e) {
+                console.error('Restore failed:', e);
+            }
+        }
+        
+        async function launchSession() {
             const input = document.getElementById('urlInput');
             const btn = document.getElementById('launchBtn');
             let url = input.value.trim();
             
-            if (!url) return alert('Enter URL');
+            if (!url) return;
             if (!url.startsWith('http')) { url = 'https://' + url; input.value = url; }
             
             btn.disabled = true;
@@ -223,22 +397,25 @@
             try {
                 const res = await fetch('/api/sessions', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'x-user-id': USER_ID
+                    },
                     body: JSON.stringify({ url })
                 });
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'Failed');
                 
-                addCard(data);
+                addSessionCard(data);
                 input.value = '';
             } catch(e) {
                 alert('Error: ' + e.message);
             }
             btn.disabled = false;
-            btn.textContent = '🚀 Launch';
+            btn.textContent = 'Launch';
         }
         
-        function addCard(s) {
+        function addSessionCard(s) {
             document.getElementById('emptyState').style.display = 'none';
             
             const card = document.createElement('div');
@@ -246,56 +423,93 @@
             card.id = 'card-' + s.sessionId;
             card.innerHTML = `
                 <div class="session-header">
-                    <span class="session-id">🖥️ ${s.sessionId.substring(0,12)}...</span>
-                    <span class="status-badge status-starting" id="st-${s.sessionId}">STARTING</span>
+                    <span class="session-id">🖥️ ${s.sessionId.substring(0, 12)}...</span>
+                    <div>
+                        <button class="btn-open-tab" onclick="openFullscreen('${s.streamUrl}')">Full View</button>
+                        <span class="status-badge status-starting" id="st-${s.sessionId}">Starting</span>
+                    </div>
                 </div>
                 <div class="session-url">🔗 ${s.url}</div>
                 <iframe class="session-preview" id="fr-${s.sessionId}" src="${s.streamUrl}"
-                    onload="document.getElementById('st-${s.sessionId}').textContent='ACTIVE';document.getElementById('st-${s.sessionId}').className='status-badge status-active';"></iframe>
+                    onload="document.getElementById('st-${s.sessionId}').textContent='Active';document.getElementById('st-${s.sessionId}').className='status-badge status-active';"></iframe>
                 <div class="session-footer">
-                    <span id="tm-${s.sessionId}">⏱️ 30:00</span>
-                    <button class="btn-stop" onclick="stop('${s.sessionId}')">⏹ Stop</button>
+                    <span class="timer" id="tm-${s.sessionId}">⏱️ 30:00</span>
+                    <button class="btn-stop" onclick="stopSession('${s.sessionId}')">Stop Session</button>
                 </div>
             `;
             
             document.getElementById('grid').appendChild(card);
             
+            const created = s.created || Date.now();
             const timer = setInterval(() => updateTimer(s.sessionId), 1000);
-            const cleanup = setTimeout(() => stop(s.sessionId), 30*60*1000);
+            const cleanup = setTimeout(() => stopSession(s.sessionId), 30 * 60 * 1000);
             
-            sessions.set(s.sessionId, { ...s, timer, cleanup });
+            activeSessions.set(s.sessionId, { ...s, created, timer, cleanup });
             updateCount();
         }
         
         function updateTimer(id) {
-            const s = sessions.get(id);
-            if (!s) return;
-            const rem = Math.max(0, 1800 - Math.floor((Date.now()-s.created)/1000));
-            const m = Math.floor(rem/60), sec = rem%60;
-            const el = document.getElementById('tm-'+id);
+            const s = activeSessions.get(id);
+            if (!s || !s.created) return;
+            
+            const elapsed = Math.floor((Date.now() - s.created) / 1000);
+            const rem = Math.max(0, 1800 - elapsed);
+            const m = Math.floor(rem / 60);
+            const sec = rem % 60;
+            
+            const el = document.getElementById('tm-' + id);
             if (el) {
-                el.textContent = `⏱️ ${m}:${sec.toString().padStart(2,'0')}`;
-                if (rem < 300) el.style.color = '#ff4757';
+                el.textContent = `⏱️ ${m}:${sec.toString().padStart(2, '0')}`;
+                if (rem < 300) el.classList.add('timer-warning');
             }
-            if (rem <= 0) stop(id);
+            
+            if (rem <= 0) stopSession(id);
         }
         
-        async function stop(id) {
-            const s = sessions.get(id);
+        async function stopSession(id) {
+            const s = activeSessions.get(id);
             if (!s) return;
+            
             clearInterval(s.timer);
             clearTimeout(s.cleanup);
-            await fetch('/api/sessions/'+id, {method:'DELETE'});
-            document.getElementById('card-'+id)?.remove();
-            sessions.delete(id);
+            
+            await fetch(`/api/sessions/${id}`, {
+                method: 'DELETE',
+                headers: { 'x-user-id': USER_ID }
+            });
+            
+            const card = document.getElementById('card-' + id);
+            if (card) {
+                card.style.opacity = '0';
+                card.style.transform = 'scale(0.98)';
+                card.style.transition = 'all 0.3s ease';
+                setTimeout(() => card.remove(), 300);
+            }
+            
+            activeSessions.delete(id);
             updateCount();
-            if (sessions.size === 0) document.getElementById('emptyState').style.display = 'block';
+            
+            if (activeSessions.size === 0) {
+                setTimeout(() => {
+                    if (activeSessions.size === 0) {
+                        document.getElementById('emptyState').style.display = 'block';
+                    }
+                }, 400);
+            }
         }
         
         function updateCount() {
-            document.getElementById('countDisplay').textContent = sessions.size;
-            document.getElementById('countBadge').textContent = 'Active: ' + sessions.size;
+            const count = activeSessions.size;
+            document.getElementById('countDisplay').textContent = count;
+            document.getElementById('countBadge').textContent = `Active: ${count}`;
         }
+        
+        function openFullscreen(url) {
+            window.open(url, '_blank');
+        }
+        
+        // Restore on load
+        restoreSessions();
     </script>
 </body>
 </html>
