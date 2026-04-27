@@ -18,6 +18,8 @@ GhostBrowse is a cybersecurity sandbox that runs isolated browser sessions insid
 - Lightweight and responsive web interface  
 
 ---
+Inline-style: 
+![alt text]([https://github.com/ledzF/GhostBrowse_Sandbox/blob/main/Screenshot%202026-04-28%20045614.png "Logo Title")
 
 ## Architecture
 
