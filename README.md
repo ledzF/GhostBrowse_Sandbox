@@ -57,6 +57,7 @@ cd ghostbrowse
 npm install
 docker pull dorowu/ubuntu-desktop-lxde-vnc
 node server.js
+./cloudflared tunnel --url http://localhost:3000
 ````
 
 ---
